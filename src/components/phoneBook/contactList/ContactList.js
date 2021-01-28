@@ -13,8 +13,7 @@ const ContactList = ({ contacts, deleteContact }) => {
                         <CSSTransition
                             key={contact.id}
                             timeout={250}
-                            classNames={s}
-                            unmountOnExit>
+                            classNames={s}>
                             <li className={s.listItem}>
                                 <span className={s.name}>{contact.name}</span>: <span>{contact.number}</span>
                                 <button className={s.button} type="button" data-id={contact.id} onClick={deleteContact}>Delete</button>

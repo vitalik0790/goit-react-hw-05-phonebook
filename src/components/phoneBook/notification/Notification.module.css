@@ -1,10 +1,9 @@
 .NotificationWrapper {
   width: 200px;
-  height: 50px;
   text-align: center;
-  padding-top: 25px;
+  padding: 25px 10px;
   margin-right: 0px;
-  background-color: blue;
+  background-color: tomato;
   color: white;
   position: absolute;
   top: 0;

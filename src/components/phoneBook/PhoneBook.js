@@ -14,6 +14,7 @@ class PhoneBook extends Component {
         contacts: [],
         filter: "",
         newContact: null,
+        showAlert: false,
     }
 
     componentDidMount() {
@@ -32,24 +33,27 @@ class PhoneBook extends Component {
         }
     }
 
-    addContact = (newContact) => {
+    addContact = ({ name, number }) => {
+        const { contacts } = this.state;
         const contact = {
             id: uuidv4(),
-            name: newContact.name,
-            number: newContact.number,
+            name,
+            number,
         };
 
-
-        this.setState((prevState) => {
-            return prevState.contacts.find(
-                (contact) =>
-                    contact.name.toLowerCase() === newContact.name.toLowerCase()
-            )
-                ? this.setState({ doubleName: contact.name })
-                : {
-                    contacts: [...prevState.contacts, contact],
-                };
+        if (contacts.find(
+            el => el.name.toLowerCase() === name.toLowerCase(),
+        )) {
+            this.setState({ newContact: contact.name, showAlert: true })
+            setTimeout(() => this.setState({ newContact: null, showAlert: false }), 2500);
+            return;
+        }
+        this.setState(prevState => {
+            return {
+                contacts: [...prevState.contacts, contact],
+            };
         });
+
     };
 
     deleteContact = (e) => {
@@ -68,6 +72,8 @@ class PhoneBook extends Component {
 
 
     render() {
+        const { newContact, showAlert } = this.state;
+
         return (
             <div>
                 <CSSTransition
@@ -81,8 +87,8 @@ class PhoneBook extends Component {
                 <ContactForm addContact={this.addContact} />
                 {this.state.contacts.length > 0 && <ContactFilter filter={this.state.filter} onHandleFilter={this.onHandleFilter} />}
                 <ContactList contacts={this.getFiltredContacts()} deleteContact={this.deleteContact} />
-                <CSSTransition in={this.state.newContact} timeout={250} classNames={s} unmountOnExit>
-                    <Notification name={this.state.newContact} />
+                <CSSTransition in={showAlert} appear={true} timeout={250} classNames={s} unmountOnExit>
+                    <Notification name={newContact} />
                 </CSSTransition>
             </div >
         );
