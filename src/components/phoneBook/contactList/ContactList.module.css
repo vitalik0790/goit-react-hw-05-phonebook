@@ -16,3 +16,26 @@
 .name {
   font-weight: 500;
 }
+
+.enter {
+  opacity: 0;
+  transform: translateX(-100%);
+  /* transform: scaleY(0.1); */
+}
+.enterActive {
+  opacity: 1;
+  transform: translateX(0);
+  /* transform: scaleY(1); */
+  transition: all 250ms linear;
+}
+.exit {
+  opacity: 1;
+  transform: translateX(0);
+  /* transform: scaleY(1); */
+}
+.exitActive {
+  opacity: 0;
+  /* transform: scaleY(0.1); */
+  transform: translateX(-100%);
+  transition: all 250ms linear;
+}

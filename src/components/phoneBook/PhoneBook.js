@@ -5,18 +5,15 @@ import ContactList from './contactList/ContactList';
 import ContactFilter from './contactFilter/ContactFilter';
 import { CSSTransition } from "react-transition-group";
 import s from './PhoneBook.module.css';
-console.log(s)
+import Notification from './notification/Notification';
+
 
 
 class PhoneBook extends Component {
     state = {
-        contacts: [
-            { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-            { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-            { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-            { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-        ],
+        contacts: [],
         filter: "",
+        newContact: null,
     }
 
     componentDidMount() {
@@ -35,19 +32,20 @@ class PhoneBook extends Component {
         }
     }
 
-    addContact = (newContacts) => {
+    addContact = (newContact) => {
         const contact = {
             id: uuidv4(),
-            name: newContacts.name,
-            number: newContacts.number,
+            name: newContact.name,
+            number: newContact.number,
         };
+
 
         this.setState((prevState) => {
             return prevState.contacts.find(
                 (contact) =>
-                    contact.name.toLowerCase() === newContacts.name.toLowerCase()
+                    contact.name.toLowerCase() === newContact.name.toLowerCase()
             )
-                ? alert(`${newContacts.name} is already in contacts.`)
+                ? this.setState({ doubleName: contact.name })
                 : {
                     contacts: [...prevState.contacts, contact],
                 };
@@ -81,8 +79,11 @@ class PhoneBook extends Component {
                     <h1 className={s.title}>Phonebook</h1>
                 </CSSTransition>
                 <ContactForm addContact={this.addContact} />
-                <ContactFilter filter={this.state.filter} onHandleFilter={this.onHandleFilter} />
+                {this.state.contacts.length > 0 && <ContactFilter filter={this.state.filter} onHandleFilter={this.onHandleFilter} />}
                 <ContactList contacts={this.getFiltredContacts()} deleteContact={this.deleteContact} />
+                <CSSTransition in={this.state.newContact} timeout={250} classNames={s} unmountOnExit>
+                    <Notification name={this.state.newContact} />
+                </CSSTransition>
             </div >
         );
     }
