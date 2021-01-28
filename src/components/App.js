@@ -1,15 +1,12 @@
-import React from "react";
+import React from 'react';
+import './App.css';
+import PhoneBook from './phoneBook/PhoneBook';
 
-// slr  стрелка
-// rfc  так як Андрій робив
-// rafc  стрелка
+
 const App = () => {
     return (
-        <>
-            <h1>Hello world</h1>
-            <p> lorem sdgasgaer vtsvetvtvd gvfdgdg vdf</p>
-        </>
+        <PhoneBook />
     );
-};
+}
 
 export default App;
