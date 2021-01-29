@@ -6,7 +6,7 @@ import ContactFilter from './contactFilter/ContactFilter';
 import { CSSTransition } from "react-transition-group";
 import s from './PhoneBook.module.css';
 import Notification from './notification/Notification';
-
+import Empty from './empty/Empty';
 
 
 class PhoneBook extends Component {
@@ -15,6 +15,7 @@ class PhoneBook extends Component {
         filter: "",
         newContact: null,
         showAlert: false,
+        showEmpty: false,
     }
 
     componentDidMount() {
@@ -48,6 +49,11 @@ class PhoneBook extends Component {
             setTimeout(() => this.setState({ newContact: null, showAlert: false }), 2500);
             return;
         }
+        if (!name.length || !number.length) {
+            this.setState({ showEmpty: true });
+            setTimeout(() => this.setState({ showEmpty: false }), 2500);
+            return;
+        }
         this.setState(prevState => {
             return {
                 contacts: [...prevState.contacts, contact],
@@ -72,7 +78,7 @@ class PhoneBook extends Component {
 
 
     render() {
-        const { newContact, showAlert } = this.state;
+        const { newContact, showAlert, showEmpty } = this.state;
 
         return (
             <div>
@@ -84,9 +90,16 @@ class PhoneBook extends Component {
                 >
                     <h1 className={s.title}>Phonebook</h1>
                 </CSSTransition>
+
                 <ContactForm addContact={this.addContact} />
+
                 {this.state.contacts.length > 0 && <ContactFilter filter={this.state.filter} onHandleFilter={this.onHandleFilter} />}
                 <ContactList contacts={this.getFiltredContacts()} deleteContact={this.deleteContact} />
+
+                <CSSTransition in={showEmpty} appear={true} timeout={250} classNames={s} unmountOnExit>
+                    <Empty />
+                </CSSTransition>
+
                 <CSSTransition in={showAlert} appear={true} timeout={250} classNames={s} unmountOnExit>
                     <Notification name={newContact} />
                 </CSSTransition>
